@@ -1,4 +1,6 @@
 import 'package:chatapplication/models/user_model.dart';
+import 'package:chatapplication/pages/ChatRoom.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
+    TextEditingController searchController = TextEditingController(); 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +33,7 @@ class _SearchPageState extends State<SearchPage> {
             children: [
               SizedBox(height: 20,),
               TextField(
+                controller: searchController,
                 decoration: InputDecoration(
                   labelText: "Email Address",
                 ),
@@ -36,12 +43,63 @@ class _SearchPageState extends State<SearchPage> {
               CupertinoButton(
                 color: Colors.blue,
                 child: Text("Search"),
-                 onPressed: () {}
-
+                 onPressed: () {
+                  setState(() {
+                    
+                  });
+                 }
+                   
                  ),
                  SizedBox(height: 20,),
 
-                 //StreamBuilder(),
+                 StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("users").where
+                  ("email",isEqualTo: searchController.text).where("email",isNotEqualTo: widget.userModel.email).snapshots(),
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.active){
+                        if(snapshot.hasData){
+                          QuerySnapshot dataSnapshot = snapshot.data as 
+                          QuerySnapshot;
+                          if(dataSnapshot.docs.length>0){
+                             Map<String,dynamic> userMap = dataSnapshot.docs[0].data() as 
+                            Map<String,dynamic> ;
+
+                            UserModel searchedUser = UserModel.fromMap(userMap);
+                            return ListTile(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context){
+                                      return ChatRoom();
+                                    } )
+                                  );
+                              },
+                              leading: CircleAvatar(
+                                backgroundImage:  NetworkImage(searchedUser.profilepic!),
+                              ),
+                              title: Text(searchedUser.fullname.toString()),
+                              subtitle: Text(searchedUser.email.toString()),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                            );
+                          }else{
+                            return Text("No result found !");
+                          } 
+                        }
+                        else if(snapshot.hasError){
+                           return Text("An error occured !");
+                        }
+                        else{
+                          return Text("No result found !");
+                        }
+                    }
+                    else{
+                      return CircularProgressIndicator();
+                    }
+                  }
+                  ),
+                 
             ],
           ),
 

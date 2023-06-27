@@ -40,7 +40,7 @@ class _CompletePageState extends State<CompletePage> {
     CroppedFile? croppedImage =  await ImageCropper().cropImage(
       sourcePath: file.path,
       aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-      compressQuality: 20,
+      compressQuality: 15,
       );
      
      if(croppedImage!=null){
