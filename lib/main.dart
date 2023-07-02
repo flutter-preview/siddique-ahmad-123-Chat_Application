@@ -6,7 +6,10 @@ import 'package:chatapplication/pages/signupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'HomePage.dart';
+
+var uuid = Uuid();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +21,9 @@ void main() async {
   UserModel? thisUserModel = await FirebaseHelper.getUserModelById
   (currentUser.uid);
 
-  if(thisUserModel!=null)
-  runApp(MyAppLoggedIn(userModel:thisUserModel , firebaseUser: currentUser));
-
-  else{
+  if(thisUserModel!=null) {
+    runApp(MyAppLoggedIn(userModel:thisUserModel , firebaseUser: currentUser));
+  } else{
   //not loggedin
   runApp(const MyApp());
  }

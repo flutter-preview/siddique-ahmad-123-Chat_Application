@@ -24,7 +24,9 @@ class _HomePageState extends State<HomePage> {
         title: Text("Chat Application",style: TextStyle(color: Colors.black),),
       ),
       body: SafeArea(
-        child: Container(),
+        child: Container(
+          
+        ),
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.grey,
