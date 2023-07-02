@@ -49,7 +49,7 @@ void login(String email, String password) async{
     UserModel userModel = UserModel.fromMap(userData.data() as Map<String, dynamic>);
 
 // go to home page:
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context){

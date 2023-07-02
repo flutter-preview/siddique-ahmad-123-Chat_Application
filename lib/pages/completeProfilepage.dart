@@ -103,7 +103,8 @@ class _CompletePageState extends State<CompletePage> {
 
       await FirebaseFirestore.instance.collection("users").doc(widget.userModel.uid).set(widget.userModel.toMap()).then((value) {
         //data uploaded!!
-       Navigator.push(
+         Navigator.popUntil(context, (route) => route.isFirst);
+       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context){
