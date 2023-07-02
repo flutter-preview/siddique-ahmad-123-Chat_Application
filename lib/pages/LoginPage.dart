@@ -1,6 +1,7 @@
 
 
 import 'package:chatapplication/HomePage.dart';
+import 'package:chatapplication/models/UIhelper.dart';
 import 'package:chatapplication/models/user_model.dart';
 import 'package:chatapplication/pages/signupPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +25,7 @@ String email= emailController.text.trim();
 String password= passwordController.text.trim();
 
 if(email == "" || password== ""){
-  print("please enter detail !!");
+  UIhelper.showAlertDialog(context, "Incomplete Data", "Please fill all the fields.");
 }
 else {
   login(email, password);
@@ -35,11 +36,17 @@ else {
 void login(String email, String password) async{
    UserCredential? credential;
 
+   UIhelper.showLoadingDialog(context, "Loging In..");
+
    try{
     credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email, password: password);
    }on FirebaseAuthException catch(ex){
-    print(ex.code.toString());
+    //close the loading dialogue
+    Navigator.pop(context);
+    //show alert dialog
+    UIhelper.showAlertDialog(context, "An error occured", ex.message.toString());
+  
    }
 
    if(credential!=null){
@@ -49,6 +56,7 @@ void login(String email, String password) async{
     UserModel userModel = UserModel.fromMap(userData.data() as Map<String, dynamic>);
 
 // go to home page:
+Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

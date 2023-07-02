@@ -1,5 +1,6 @@
 import 'package:chatapplication/models/ChatRoomModel.dart';
 import 'package:chatapplication/models/Firebase_helper.dart';
+import 'package:chatapplication/models/UIhelper.dart';
 import 'package:chatapplication/models/user_model.dart';
 import 'package:chatapplication/pages/ChatRoom.dart';
 import 'package:chatapplication/pages/LoginPage.dart';
@@ -132,6 +133,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.grey,
           onPressed: () {
+           // UIhelper.showLoadingDialog(context,"Loading...");
           Navigator.push(
             context,
             MaterialPageRoute(

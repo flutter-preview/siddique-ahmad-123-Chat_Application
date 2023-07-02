@@ -1,4 +1,5 @@
 
+import 'package:chatapplication/models/UIhelper.dart';
 import 'package:chatapplication/models/user_model.dart';
 import 'package:chatapplication/pages/LoginPage.dart';
 import 'package:chatapplication/pages/completeProfilepage.dart';
@@ -26,10 +27,10 @@ class _SignUpState extends State<SignUp> {
     String Cpassword = CpasswordController.text.trim();
 
     if(email == "" || password == ""||Cpassword==""){
-      print("please enter all detail !!");
+     UIhelper.showAlertDialog(context, "Incomplete Data", "Please fill all the fields.");
     }
     else if(password != Cpassword){
-      print("password do not match !!");
+      UIhelper.showAlertDialog(context, "Password Mismatch", "The Password You entered do not match.");
     }
 
     else{
@@ -41,11 +42,16 @@ class _SignUpState extends State<SignUp> {
 
   void signUp(String email,String password) async {
      UserCredential? Credential;
+
+     UIhelper.showLoadingDialog(context, "Creating New Account..");
   try{
      Credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email, password: password);
   } on FirebaseAuthException catch(ex){
-    print(ex.code.toString());
+    Navigator.pop(context);
+    
+    UIhelper.showAlertDialog(context, "An Error occured.", ex.message.toString());
+    
   }
   
   if(Credential!= null){

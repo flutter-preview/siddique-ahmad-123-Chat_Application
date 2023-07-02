@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:chatapplication/HomePage.dart';
+import 'package:chatapplication/models/UIhelper.dart';
 import 'package:chatapplication/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -83,7 +84,8 @@ class _CompletePageState extends State<CompletePage> {
     String fullname = fullnameController.text.trim();
 
     if(fullname == "" || imageFile == ""){
-      print("please fill all the fields !!");
+      //print("please fill all the fields !!");
+      UIhelper.showAlertDialog(context, "Incomplete Data", "please uploade profilepic and write fullname");
     }
      else{
        UploadData();
@@ -91,6 +93,7 @@ class _CompletePageState extends State<CompletePage> {
   }
 
   void UploadData() async{
+    UIhelper.showLoadingDialog(context, "Uploading Image..");
        UploadTask uploadTask = FirebaseStorage.instance.ref("profilePictures").child(widget.userModel.uid.toString()).putFile(File(imageFile!.path));
       
       TaskSnapshot snapshot = await uploadTask;
